@@ -1,76 +1,57 @@
-# hynet_tool1_v1 ? Tool1 (acdcopf)
+# Tool1 (acdcopf)
 
-Hybrid AC/DC optimal power flow for the HYNET workbench. Tool1 minimizes active power losses using Pyomo/IPOPT. Tool5 (acdcpf) supplies the power-flow baseline and initialization.
+**Hybrid AC/DC Optimal Power Flow for HYNET**
 
-**Release status:** local integration candidate. OPF equations are unchanged; the common Tool5 backend adds explicit converter-limit policies. Redistribution requires resolution of the license evidence described in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+Tool1 minimizes active power losses using Pyomo/IPOPT, with Tool5 (acdcpf) providing power flow and initialization.
 
-See [Common Tool5 integration](docs/COMMON_TOOL5.md) and [validation results](docs/COMMON_TOOL5_VALIDATION.md) for the standalone solver API, compatibility boundaries and release instructions.
+## Features
 
-**Tool5 is an external dependency and is not included in this repository.** Tool1 requires the compatible `acdcpf==0.2.0+tool5.1` package with Tool5 API v1 (including validation, transformers and storage). Obtain its wheel or source checkout separately from the Tool5 maintainers. The standard upstream `acdcpf` package is not a drop-in substitute for this compatible version. See [GitHub setup](GITHUB_SETUP.md).
+- AC-only and hybrid AC/DC networks, including VSCs, transformers and storage.
+- Custom PyPOWER AC and MatACDC DC case imports.
+- PF-only and OPF runs, editable network data and time profiles.
+- Dashboard, Python interface, REST API and result exports.
+- Independent frontend and backend for workbench integration.
 
-## Install
+## Installation
 
-Python 3.10 or newer, and an operating-system-compatible IPOPT executable are required. This release is tested on Windows/Python 3.10; other Python/OS combinations require validation.
+Requires Python 3.10+ (tested on Windows/Python 3.10) and IPOPT for optimization.
 
-After cloning this repository, open a terminal in its directory:
+**Tool5 is required separately and is not included.** Obtain the compatible `acdcpf==0.2.0+tool5.1` package (Tool5 API v1) from its maintainers. This version is not on PyPI; standard upstream `acdcpf` is not a drop-in replacement.
 
 ```powershell
+git clone https://github.com/bereczkibence/hynet_tool1_v1.git
+cd hynet_tool1_v1
 python -m venv .venv
-# Replace this example path with the separately obtained Tool5 wheel or source folder.
-.\.venv\Scripts\python.exe -m pip install "C:\path\to\compatible-tool5"
-.\.venv\Scripts\python.exe -m pip install ".[dashboard]"
+.\.venv\Scripts\python.exe -m pip install "C:\path\to\compatible-tool5" ".[dashboard]"
 .\.venv\Scripts\idaes.exe get-extensions
-.\.venv\Scripts\tool1-doctor.exe --solve
 ```
 
-On Windows, run `Install_Tool1.bat -Tool5Path "C:\path\to\compatible-tool5"`. If the required Tool5 version is already installed in this folder's `.venv`, the path may be omitted. On Linux/macOS use `.venv/bin/` instead of `.venv\Scripts\`. Install Tool5 separately in the same environment before Tool1; the exact common version is not on PyPI. Optional PyFlow comparisons require `.[reference]`; they are not part of the default workflow.
+Replace the example Tool5 path with its wheel or source folder. On Windows, `Install_Tool1.bat -Tool5Path "C:\path\to\compatible-tool5"` also installs and checks the application.
 
-## Run the demonstration frontend
-
-Double-click `Tool1_Dashboard.bat`, or run:
+## Quick Start
 
 ```powershell
 .\.venv\Scripts\tool1-dashboard.exe
 ```
 
-Open **http://127.0.0.1:8521/**. The backend runs on port 8520. The included original Stagg5 case is a quick PF/OPF example. Select PF-only for the baseline; clear it to run Tool1 optimization.
+Open **http://127.0.0.1:8521/**. Select **Original Stagg5** for a built-in example, or import `examples/two_bus_ac.py`. Choose PF-only for power flow; otherwise run OPF. PF convergence does not certify equipment-limit feasibility.
 
-For a synthetic import, select `examples/two_bus_ac.py` as the AC case and run PF-only. Custom files are data-only Python case definitions, never executed. Hybrid imports require explicit format and loss-unit choices; see [Custom networks](docs/CUSTOM_NETWORKS.md).
-
-PF convergence means the electrical equations were solved; it does not certify equipment limits. OPF success requires solver completion and passing physics diagnostics. Unconstrained PF preserves requested controls; converter-limited PF reports any control adjustments. Ratings are never resized.
-
-## Independent components
+For independent operation, run these in separate terminals:
 
 ```powershell
-# Terminal 1: backend only
 .\.venv\Scripts\tool1-backend.exe --port 8520 --cors-origin http://127.0.0.1:8521
-# Terminal 2: demonstration frontend only
 .\.venv\Scripts\tool1-frontend.exe --port 8521 --backend-url http://127.0.0.1:8520
 ```
 
-The standalone frontend ZIP runs with standard Python and no solver packages: `python serve.py --backend-url http://127.0.0.1:8520`.
+API documentation: **http://127.0.0.1:8520/docs**.
 
-The common workbench frontend may call the API directly without this demonstration UI. OpenAPI: **http://127.0.0.1:8520/docs**. See [Workbench integration](docs/WORKBENCH.md).
+## Documentation
 
-## Python and command line
+- [Custom networks](docs/CUSTOM_NETWORKS.md)
+- [Tool5 dependency and Python usage](docs/COMMON_TOOL5.md)
+- [Workbench integration](docs/WORKBENCH.md)
+- [Validation results and limitations](docs/COMMON_TOOL5_VALIDATION.md)
 
-```python
-from acdcopf import load_custom_network, custom_grid_case, BenchmarkRequest, run_benchmark_request
-network = load_custom_network("examples/two_bus_ac.py")
-result = run_benchmark_request(BenchmarkRequest(
-    grid_case=custom_grid_case(network), skip_opf=True,
-    include_pyflow_reference=False, write_exports=False))
-print(result.success)
-```
+## License
 
-```powershell
-.\.venv\Scripts\tool1-run.exe examples\pf_request.json
-```
-
-This reads a JSON request, runs the same service as the API, and writes JSON to stdout. Exit codes: 0 successful calculation, 1 failed calculation, 2 invalid request/application error. Solver console output goes to stderr.
-
-`TOOL1_REPORT_DIR` sets the output directory; `TOOL1_IPOPT` sets the executable. Use these Tool1 variable names for configuration. Default reports live in the current user's Tool1Common application-data directory. The legacy internal import `acdcpf_opf` remains available.
-
-## Development and release
-
-See [Development](DEVELOPMENT.md), [Provenance](docs/PROVENANCE.md), and [Validation](docs/VALIDATION.md). Private `inputs/` are ignored and excluded from releases. Run `python scripts/build_release.py` to build the wheel, source distribution, source archive, and independent frontend archive after installing build requirements.
+See [license and attribution notes](THIRD_PARTY_NOTICES.md). Tool1 license-grant evidence remains pending; this repository does not assert a new license grant.
