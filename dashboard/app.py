@@ -26,6 +26,7 @@ from acdcpf_opf.benchmarks.stagg5.service import (
 from acdcpf_opf.dashboard.runtime import DashboardRunManager
 from acdcpf_opf.data.time_profiles import load_time_profile
 from acdcpf_opf.runtime_paths import reports_directory
+from acdcopf.status import DEVELOPMENT_STATUS, DEVELOPMENT_NOTICE
 
 
 DASHBOARD_RUN_ROOT = reports_directory() / "dashboard_runs"
@@ -43,6 +44,8 @@ def main() -> None:
     st.caption(
         "Configure ACDCPF PF and Tool1 (acdcopf) loss minimization runs without using terminal prompts."
     )
+
+    st.info(DEVELOPMENT_STATUS + ". " + DEVELOPMENT_NOTICE)
 
     settings = _sidebar_settings(st)
     tabs = st.tabs(["Network Inputs", "Profiles", "Run Status", "Results", "Grid View", "Exports"])

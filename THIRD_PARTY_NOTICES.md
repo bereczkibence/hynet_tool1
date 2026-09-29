@@ -1,8 +1,12 @@
 # License and attribution review
 
-## Release blocker: Tool1 source license evidence
+## Tool1 license and attribution
 
-The source project declares MIT in pyproject.toml, but the copied source has no root LICENSE file identifying its copyright holders and license grant. The Tool1 distribution metadata therefore records that verification is pending. No new copyright ownership or license grant is asserted here. Obtain the applicable license text and attribution from the project owners before external redistribution. Local integration artifacts are supplied for review, not marked legally cleared for publication.
+Tool1 is distributed under the MIT License in the root LICENSE file, with the existing HYNET OPF Contributors attribution. On 29 September 2026, the project maintainer confirmed agreement with the original Tool1 author to release it under MIT. This resolves the previously recorded missing Tool1 license-grant confirmation. See docs/PROVENANCE.md for the original source lineage.
+
+## Development status
+
+Tool1 is a functional working version under active development. Features, interfaces and documentation may change as refinement and validation continue. Review solver diagnostics and validate results for the intended application. This notice does not add restrictions to the MIT License. Dependency licenses and third-party attribution continue to apply.
 
 ## Tool5 (acdcpf)
 

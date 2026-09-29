@@ -7,8 +7,10 @@ release archives, private inputs, environments or generated reports are included
 Launchers are source scripts, not compiled executables.
 
 This repository uses the main branch. Tool5 is maintained separately.
-Before external redistribution, resolve the Tool1 license-grant evidence listed
-in THIRD_PARTY_NOTICES.md. No license or copyright ownership has been invented.
+Tool1 is distributed under the MIT License in LICENSE. Preserve that license and
+the attribution in THIRD_PARTY_NOTICES.md when sharing source or distributions.
+
+**Working development version.** Tool1 is a functional working version under active development. Features, interfaces and documentation may change as refinement and validation continue. Review solver diagnostics and validate results for the intended application.
 
 Repository: https://github.com/bereczkibence/hynet_tool1_v1
 

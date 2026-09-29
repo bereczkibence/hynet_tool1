@@ -15,8 +15,12 @@ No numerical engine files or equations were modified. Source data and converter 
 
 ## Verification and next step
 
-See VALIDATION.md for actual PF/IPOPT diagnostics and tests. The known release blockers are unresolved source license evidence and an outstanding visual browser review. Confirm those before distributing publicly. For local use, launch Tool1_Dashboard.bat; for integration, use the independent backend and WORKBENCH.md.
+See VALIDATION.md for actual PF/IPOPT diagnostics and tests. Tool1 is a working development version with ongoing validation, including the outstanding visual browser review. The maintainer has confirmed MIT licensing; see LICENSE and THIRD_PARTY_NOTICES.md. For local use, launch Tool1_Dashboard.bat; for integration, use the independent backend and WORKBENCH.md.
 
 ## Naming cleanup
 
 Removed the former product name from application identifiers, benchmark/report labels, Excel company metadata, CLI commands, launchers, examples, and request schemas. The PF-only option is now `skip_opf` in Python/JSON and `--skip-opf` in the benchmark CLI. Set `TOOL1_REPORT_DIR` and `TOOL1_IPOPT`; old aliases were removed. Update older workbench clients to these names. Source-engine files, historical provenance, and the pinned dependency version remain unchanged.
+
+## Development status and MIT license
+
+Added the MIT License with the existing HYNET OPF Contributors attribution following maintainer confirmation of agreement with the original author. Marked Tool1 as a working development version across public documentation, package metadata, the dashboard, API documentation and human-readable reports. Refinement and validation remain ongoing. Engine equations, equipment limits and solver settings are unchanged.

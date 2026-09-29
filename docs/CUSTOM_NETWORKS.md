@@ -1,5 +1,7 @@
 # Custom network import
 
+**Working development version.** Tool1 is a functional working version under active development. Features, interfaces and documentation may change as refinement and validation continue. Review solver diagnostics and validate results for the intended application.
+
 The dashboard and Python API accept a data-only PyPOWER AC `.py` case and an
 optional MatACDC DC `.py` companion. Original case files are never modified.
 Import validates structure and converts equipment; it does not certify that

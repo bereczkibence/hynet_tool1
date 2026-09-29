@@ -8,4 +8,4 @@ Use `TOOL1_REPORT_DIR` for writable reports. On Windows the default is `%LOCALAP
 
 The frontend ZIP needs only standard Python. Run `python serve.py --backend-url http://127.0.0.1:8520`. Installing the solver package is unnecessary on the frontend host.
 
-This is an integration candidate, not a published package. License provenance must be resolved before external redistribution; see the root notices file.
+**Working development version.** Tool1 is a functional working version under active development. Features, interfaces and documentation may change as refinement and validation continue. Review solver diagnostics and validate results for the intended application. Tool1 is distributed under the MIT License; see ../LICENSE and ../THIRD_PARTY_NOTICES.md.

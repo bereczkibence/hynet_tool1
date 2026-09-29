@@ -109,5 +109,6 @@ The original checksum manifest is preserved. `integration_checksums.json` record
 only the four authorized adapter/importer/bootstrap integration changes; OPF and
 case checksums retain the original baseline. Tool5 has its own provenance record.
 Private `inputs/`, virtual environments, Git state and reports are excluded from
-artifacts. This remains a local integration candidate; see licensing notices before
-publishing either project.
+artifacts. Tool1 is a working development version distributed under MIT. See
+LICENSE and THIRD_PARTY_NOTICES.md for the applicable license and attribution.
+Further refinement and validation remain in progress.

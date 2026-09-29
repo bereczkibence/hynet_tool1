@@ -54,9 +54,10 @@ until control-switch semantics for OPF are designed and validated. The physical
 interpretation of the supplied Tool #7 DC base still requires source-owner
 confirmation; the importer now exposes that choice rather than guessing it.
 
-This is a local integration candidate, not an upstream release. No remote was
-created or published. Existing Tool1 licensing questions remain as documented in
-THIRD_PARTY_NOTICES.md; Tool5 carries both upstream and fork license evidence.
+These results describe the recorded local integration checks, not an upstream
+Tool5 release. Tool1 is a working development version with continuing refinement
+and validation. The maintainer subsequently confirmed the Tool1 MIT release;
+see LICENSE and THIRD_PARTY_NOTICES.md. Tool5 retains its own license evidence.
 
 Detailed execution output and comparison data are retained locally under
 `.validation/`; generated logs and private data are excluded from releases.

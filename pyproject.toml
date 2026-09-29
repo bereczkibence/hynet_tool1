@@ -5,10 +5,11 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "hynet-tool1"
 version = "0.3.0"
-description = "Hybrid AC/DC active-power-loss minimization OPF using ACDCPF, Pyomo, and IPOPT."
+description = "Hybrid AC/DC active-power-loss minimization OPF using ACDCPF, Pyomo, and IPOPT (working development version)."
 readme = "README.md"
 requires-python = ">=3.10"
-license-files = ["THIRD_PARTY_NOTICES.md"]
+license = "MIT"
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md"]
 authors = [
     { name = "HYNET OPF Contributors" }
 ]

@@ -8,6 +8,7 @@ import os
 import logging
 from importlib import metadata
 from acdcopf.presentation import brand_text
+from acdcopf.status import DEVELOPMENT_STATUS, DEVELOPMENT_NOTICE
 from typing import Any, Mapping
 
 import pandas as pd
@@ -119,7 +120,7 @@ def create_app(*, serve_frontend: bool = True, cors_origins: list[str] | None = 
         )
 
     app = FastAPI(title="Tool1 (acdcopf) API", version="0.3.0",
-        description="Single active run per process. Imports expire on restart. PF convergence is not a limit-feasibility certificate.")
+        description=DEVELOPMENT_STATUS + ". " + DEVELOPMENT_NOTICE + " Single active run per process. Imports expire on restart. PF convergence is not a limit-feasibility certificate.")
     origins = cors_origins if cors_origins is not None else [x for x in os.environ.get("TOOL1_CORS_ORIGINS", "").split(",") if x]
     if origins:
         app.add_middleware(CORSMiddleware, allow_origins=origins, allow_methods=["GET", "POST"], allow_headers=["Content-Type"])
@@ -142,7 +143,7 @@ def create_app(*, serve_frontend: bool = True, cors_origins: list[str] | None = 
     @app.get("/api/health")
     def health():
         from acdcpf_opf.runtime_paths import ipopt_executable_path
-        return {"status": "ok", "tool": "Tool1 (acdcopf)", "version": "0.3.0", "power_flow": {"tool": "Tool5 (acdcpf)", **__import__("acdcpf").capabilities()}, "ipopt_available": ipopt_executable_path().is_file(), "session_id": SESSION_ID, "max_active_runs": 1}
+        return {"status": "ok", "tool": "Tool1 (acdcopf)", "version": "0.3.0", "development_status": DEVELOPMENT_STATUS, "power_flow": {"tool": "Tool5 (acdcpf)", **__import__("acdcpf").capabilities()}, "ipopt_available": ipopt_executable_path().is_file(), "session_id": SESSION_ID, "max_active_runs": 1}
 
     if serve_frontend:
         app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")

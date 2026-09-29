@@ -4,6 +4,8 @@
 
 Tool1 minimizes active power losses using Pyomo/IPOPT, with Tool5 (acdcpf) providing power flow and initialization.
 
+**Working development version.** Tool1 is a functional working version under active development. Features, interfaces and documentation may change as refinement and validation continue. Review solver diagnostics and validate results for the intended application.
+
 ## Features
 
 - AC-only and hybrid AC/DC networks, including VSCs, transformers and storage.
@@ -54,4 +56,4 @@ API documentation: **http://127.0.0.1:8520/docs**.
 
 ## License
 
-See [license and attribution notes](THIRD_PARTY_NOTICES.md). Tool1 license-grant evidence remains pending; this repository does not assert a new license grant.
+Tool1 is distributed under the [MIT License](LICENSE). See [third-party notices](THIRD_PARTY_NOTICES.md) for dependency attribution. The development status does not change the license terms.

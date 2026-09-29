@@ -1,4 +1,4 @@
-include README.md DEVELOPMENT.md THIRD_PARTY_NOTICES.md requirements.txt
+include LICENSE README.md DEVELOPMENT.md THIRD_PARTY_NOTICES.md requirements.txt
 include *.bat *.ps1 .gitignore
 recursive-include docs *.md *.json
 recursive-include examples *.py *.json

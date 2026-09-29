@@ -1,5 +1,7 @@
 # Tool1 development
 
+**Working development version.** Tool1 is a functional working version under active development. Features, interfaces and documentation may change as refinement and validation continue. Review solver diagnostics and validate results for the intended application.
+
 The numerical engine remains under `opf/`, with electrical import/conversion code in `data/` and PF adapters in `powerflow/`. These files are checksum-protected for this release. `acdcopf/` is the public interface and application presentation layer; `dashboard/` owns HTTP and demonstration UI integration.
 
 Install `.[dashboard,dev]` into a dedicated virtual environment. Run:

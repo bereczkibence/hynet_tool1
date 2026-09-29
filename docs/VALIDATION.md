@@ -34,6 +34,6 @@ Artifact audits found no private input contents, virtual environments, logs, byt
 
 ## Known limits
 
-No enabled browser surface was available for visual browser testing. HTTP delivery and frontend logic were tested, but visual layout and real browser interaction remain a manual release check. Cross-platform solver installation has not been validated. The API has one active run and process-local state; workbench authentication and multi-user isolation are external responsibilities. Supplied private networks are not shipped. Source license attribution is unresolved; see THIRD_PARTY_NOTICES.md before redistribution.
+No enabled browser surface was available for visual browser testing. HTTP delivery and frontend logic were tested, but visual layout and real browser interaction remain a manual release check. Cross-platform solver installation has not been validated. The API has one active run and process-local state; workbench authentication and multi-user isolation are external responsibilities. Supplied private networks are not shipped. Tool1 is a working development version; validation remains ongoing. The maintainer has confirmed the MIT release. See LICENSE and THIRD_PARTY_NOTICES.md for attribution.
 
 Naming cleanup verification: public request fields now use `skip_opf`; benchmark identifiers, launch commands, labels, export filenames, and Excel company metadata contain no former product branding. The protected engine files and pinned dependency version are unchanged.

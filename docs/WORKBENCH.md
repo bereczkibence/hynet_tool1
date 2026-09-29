@@ -1,5 +1,7 @@
 # Workbench integration
 
+**Working development version.** Tool1 is a functional working version under active development. Features, interfaces and documentation may change as refinement and validation continue. Review solver diagnostics and validate results for the intended application.
+
 Tool1 exposes a JSON/HTTP API; Tool5 is its pinned installed PF dependency. Run one backend process per workbench session or mutually trusted single-user workspace. There is one active run and one current result per process, no authentication, no durable job store, and no independent client isolation. The workbench owns routing, authentication, and orchestration. Do not run multiple Uvicorn workers against this in-memory session model.
 
 ## Endpoints

@@ -31,6 +31,7 @@ with ZipFile(release / "hynet_tool1-0.3.0-frontend.zip", "w", ZIP_DEFLATED) as a
         if path.is_file():
             archive.write(path, path.name)
     archive.write(root / "acdcopf/frontend.py", "serve.py")
-    archive.writestr("README.txt", "Tool1 demonstration frontend\nRun: python serve.py --backend-url http://127.0.0.1:8520\nOpen http://127.0.0.1:8521/\nFor static hosting edit config.js. No solver dependencies required.\n")
+    archive.writestr("README.txt", "Tool1 demonstration frontend\nWorking development version. Refinement and validation are ongoing.\nRun: python serve.py --backend-url http://127.0.0.1:8520\nOpen http://127.0.0.1:8521/\nFor static hosting edit config.js. No solver dependencies required.\n")
+    archive.write(root / "LICENSE", "LICENSE")
     archive.write(root / "THIRD_PARTY_NOTICES.md", "THIRD_PARTY_NOTICES.md")
 print("Local artifacts created in", release)
