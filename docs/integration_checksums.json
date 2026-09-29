@@ -1,0 +1,6 @@
+{
+  "acdcpf_pyflow_backend/_bootstrap.py": "a59ef6f773b20544e6ffb1e2b157c36fe798c206244a94fecec6b822ab5941bd",
+  "acdcpf_pyflow_backend/runner.py": "61891a4d576003f9d283d7fb12d78ecf5eddd804bcf42d6ff50d6c04ec595f76",
+  "data/custom_network.py": "8ee2d56504d1e9541a565c2aa185114f3ac8e06e1d3cd0be96ce516913abb257",
+  "powerflow/acdcpf_network_adapter.py": "28b69d7873afa3f59cf3ffd626b2ec1581fc895e2ff547bb0a2dbb6fd37e8c04"
+}

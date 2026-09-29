@@ -1,0 +1,91 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hynet-tool1"
+version = "0.3.0"
+description = "Hybrid AC/DC active-power-loss minimization OPF using ACDCPF, Pyomo, and IPOPT."
+readme = "README.md"
+requires-python = ">=3.10"
+license-files = ["THIRD_PARTY_NOTICES.md"]
+authors = [
+    { name = "HYNET OPF Contributors" }
+]
+dependencies = [
+    "numpy",
+    "scipy",
+    "pandas<3",
+    "pyomo>=6.10",
+    "idaes-pse",
+    "acdcpf==0.2.0+tool5.1",
+]
+
+[project.optional-dependencies]
+backend = ["openpyxl>=3.1", "fastapi>=0.115", "uvicorn[standard]>=0.30"]
+benchmark = [
+    "openpyxl>=3.1",
+]
+reference = [
+    "pyflow-acdc>=0.4.0",
+]
+dashboard = [
+    "openpyxl>=3.1",
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+]
+dev = [
+    "build",
+    "setuptools>=77",
+    "wheel",
+    "openpyxl>=3.1",
+    "pytest>=8.0",
+]
+all = [
+    "openpyxl>=3.1",
+    "pyflow-acdc>=0.4.0",
+    "pytest>=8.0",
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+]
+
+[project.scripts]
+tool1-backend = "acdcopf.cli:backend"
+tool1-frontend = "acdcopf.frontend:main"
+tool1-dashboard = "acdcopf.cli:dashboard"
+tool1-run = "acdcopf.cli:run"
+tool1-benchmark = "acdcpf_opf.benchmarks.stagg5.benchmark_pf_opf_comparison:main"
+tool1-doctor = "acdcpf_opf.install_check:main"
+acdcpf-opf-stagg5-benchmark = "acdcpf_opf.benchmarks.stagg5.benchmark_pf_opf_comparison:main"
+acdcpf-opf-native-stagg5 = "acdcpf_opf.experiments.run_acdcpf_network_opf_loss_min:main"
+
+[project.urls]
+Repository = "https://github.com/bereczkibence/hynet_tool1_v1"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.setuptools]
+include-package-data = false
+packages = [
+    "acdcopf",
+    "acdcpf_opf",
+    "acdcpf_opf.benchmarks",
+    "acdcpf_opf.benchmarks.stagg5",
+    "acdcpf_opf.data",
+    "acdcpf_opf.dashboard",
+    "acdcpf_opf.experiments",
+    "acdcpf_opf.opf",
+    "acdcpf_opf.opf.formulations",
+    "acdcpf_opf.powerflow",
+    "acdcpf_pyflow_backend",
+]
+
+[tool.setuptools.package-dir]
+acdcopf = "acdcopf"
+acdcpf_opf = "."
+acdcpf_pyflow_backend = "acdcpf_pyflow_backend"
+
+[tool.setuptools.package-data]
+"acdcpf_opf.benchmarks.stagg5" = ["profiles/*.csv"]
+"acdcpf_opf.dashboard" = ["static/*.html", "static/*.css", "static/*.js"]

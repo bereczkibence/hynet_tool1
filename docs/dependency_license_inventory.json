@@ -1,0 +1,88 @@
+[
+  {
+    "package": "acdcpf",
+    "version": "0.1.1+opf.bme.1",
+    "declared_license": "MIT",
+    "license_files": [
+      "acdcpf-0.1.1+opf.bme.1.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "package": "numpy",
+    "version": "2.2.6",
+    "declared_license": "Copyright (c) 2005-2024, NumPy Developers.",
+    "license_files": [
+      "numpy-2.2.6.dist-info/LICENSE.txt",
+      "numpy/_core/include/numpy/random/LICENSE.txt",
+      "numpy/ma/LICENSE",
+      "numpy/random/LICENSE.md"
+    ]
+  },
+  {
+    "package": "scipy",
+    "version": "1.15.3",
+    "declared_license": "Copyright (c) 2001-2002 Enthought, Inc. 2003-2024, SciPy Developers.",
+    "license_files": [
+      "scipy-1.15.3.dist-info/LICENSE.txt",
+      "scipy/_lib/_uarray/LICENSE",
+      "scipy/fft/_pocketfft/LICENSE.md",
+      "scipy/sparse/linalg/_eigen/arpack/COPYING",
+      "scipy/spatial/qhull_src/COPYING.txt"
+    ]
+  },
+  {
+    "package": "pandas",
+    "version": "2.3.3",
+    "declared_license": "BSD 3-Clause License",
+    "license_files": [
+      "pandas-2.3.3.dist-info/LICENSE"
+    ]
+  },
+  {
+    "package": "pyomo",
+    "version": "6.10.1",
+    "declared_license": "BSD-3-Clause",
+    "license_files": [
+      "pyomo-6.10.1.dist-info/licenses/LICENSE.md"
+    ]
+  },
+  {
+    "package": "idaes-pse",
+    "version": "2.13.0",
+    "declared_license": "BSD",
+    "license_files": [
+      "idaes_pse-2.13.0.dist-info/licenses/LICENSE.md"
+    ]
+  },
+  {
+    "package": "fastapi",
+    "version": "0.141.1",
+    "declared_license": "MIT",
+    "license_files": [
+      "fastapi-0.141.1.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "package": "uvicorn",
+    "version": "0.54.0",
+    "declared_license": "BSD-3-Clause",
+    "license_files": [
+      "uvicorn-0.54.0.dist-info/licenses/LICENSE.md"
+    ]
+  },
+  {
+    "package": "openpyxl",
+    "version": "3.1.5",
+    "declared_license": "MIT",
+    "license_files": []
+  },
+  {
+    "package": "pypower",
+    "version": "5.1.21",
+    "declared_license": "BSD",
+    "license_files": [
+      "pypower-5.1.21.dist-info/licenses/AUTHORS",
+      "pypower-5.1.21.dist-info/licenses/LICENSE"
+    ]
+  }
+]

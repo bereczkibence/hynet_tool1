@@ -1,0 +1,2 @@
+# Install compatible Tool5 separately first; see README.md.
+.[dashboard,benchmark]

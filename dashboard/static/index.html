@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tool1 (acdcopf) Dashboard</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">Tool5 (acdcpf) + Pyomo/IPOPT</p>
+        <h1>Tool1 (acdcopf) Dashboard</h1>
+        <p class="subtitle">
+          Configure, run, and inspect hybrid AC/DC PF and OPF studies from one local browser tool.
+        </p>
+      </div>
+      <div class="header-actions">
+        <button id="refreshStatusButton" class="ghost-button">Refresh</button>
+        <button id="runButton" class="primary-button">Run PF + OPF</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <aside class="settings-panel">
+        <section class="panel-card">
+          <h2>Custom network</h2>
+          <label>AC case (.py)<input id="customAcFile" type="file" accept=".py" /></label>
+          <label>DC companion (.py, optional)<input id="customDcFile" type="file" accept=".py" /></label>
+          <label>Hybrid format
+            <select id="customFormat"><option value="">Choose for AC/DC import</option><option value="standard">Standard MatACDC</option><option value="tool7">Tool #7</option></select>
+          </label>
+          <label id="customLossRow" class="hidden">Tool #7 loss coefficients
+            <select id="customLossUnits"><option value="">Choose units</option><option value="physical">Physical (MW, kV, ohm)</option><option value="per_unit">Per-unit on AC system base</option></select>
+          </label>
+            <label>DC voltage base convention
+              <select id="customDcVoltage"><option value="legacy">Unconfirmed — retain previous interpretation (warning)</option><option value="per_pole">Per-pole / pole-to-ground</option><option value="pole_to_pole">Pole-to-pole (symmetric bipolar, pol=2)</option></select>
+            </label>
+            <button id="importNetworkButton" type="button">Import network</button>
+          <p id="importMessage" class="helper-text">Import a data-only AC case and, optionally, its DC companion. Imports last until the dashboard restarts.</p>
+          <details><summary>Import details</summary><pre id="importDetails" style="white-space: pre-wrap; overflow-wrap: anywhere;"></pre></details>
+        </section>
+        <section class="panel-card">
+          <h2>Study Setup</h2>
+          <label>
+            Grid case
+            <select id="gridCaseSelect"></select>
+          </label>
+          <p id="caseDescription" class="helper-text"></p>
+
+          <label>
+            VSC starting setpoints
+            <select id="vscScenarioSelect"></select>
+          </label>
+
+          <label>
+            Time profile
+            <select id="profileSelect"></select>
+          </label>
+          <label id="customProfileRow" class="hidden">
+            Custom profile path
+            <input id="customProfilePath" type="text" placeholder="C:\path\profile.csv" />
+          </label>
+        </section>
+
+        <section class="panel-card">
+          <h2>OPF Controls</h2>
+          <div id="controlCheckboxes" class="checkbox-stack"></div>
+
+          <label>
+            Control scope
+            <select id="controlScopeSelect"></select>
+          </label>
+
+          <label class="inline-check">
+            <input id="useMarginCheck" type="checkbox" />
+            Limit movement by margin
+          </label>
+          <label id="marginRow" class="hidden">
+            Margin (% of rating)
+            <input id="controlMarginInput" type="number" min="0" step="1" value="10" />
+          </label>
+        </section>
+
+        <section class="panel-card">
+          <h2>Run Options</h2>
+          <label>Tool5 PF policy<select id="pfPolicy"><option value="unconstrained">Unconstrained (report overloads)</option><option value="converter_limited">Converter-limited (PF only; controls may change)</option></select></label>
+          <label class="inline-check">
+            <input id="skipOpfCheck" type="checkbox" />
+            PF only, skip Tool1 (acdcopf)
+          </label>
+          <label class="inline-check">
+            <input id="pyflowCheck" type="checkbox" />
+            Include PyFlow when comparable
+          </label>
+          <label class="inline-check">
+            <input id="writeExportsCheck" type="checkbox" checked />
+            Write exports
+          </label>
+          <div class="export-grid">
+            <label class="inline-check"><input id="markdownCheck" type="checkbox" checked /> Markdown</label>
+            <label class="inline-check"><input id="csvCheck" type="checkbox" checked /> CSV</label>
+            <label class="inline-check"><input id="xlsxCheck" type="checkbox" checked /> Excel</label>
+            <label class="inline-check"><input id="htmlCheck" type="checkbox" checked /> HTML</label>
+          </div>
+        </section>
+      </aside>
+
+      <section class="main-panel">
+        <section class="metric-grid">
+          <article class="metric-card">
+            <span>Worker</span>
+            <strong id="workerState">idle</strong>
+          </article>
+          <article class="metric-card">
+            <span>PF Loss</span>
+            <strong id="pfLoss">n/a</strong>
+          </article>
+          <article class="metric-card">
+            <span>OPF Loss</span>
+            <strong id="opfLoss">n/a</strong>
+          </article>
+          <article class="metric-card">
+            <span>OPF - PF</span>
+            <strong id="lossDelta">n/a</strong>
+          </article>
+        </section>
+
+        <section class="content-card">
+          <div class="section-title">
+            <h2>Pending Run Configuration</h2>
+            <p>The next run uses these settings. Change inputs and click Run again to rerun.</p>
+          </div>
+          <div id="pendingSummary" class="summary-grid"></div>
+          <p id="statusMessage" class="status-line"></p>
+        </section>
+
+        <section class="content-card">
+          <div class="section-title">
+            <h2>Operational Inputs</h2>
+            <p>Edit operational values only. Topology columns are locked by design.</p>
+          </div>
+          <div class="table-toolbar">
+            <select id="tableSelect"></select>
+            <button id="resetTableButton" class="ghost-button">Reset table</button>
+          </div>
+          <p id="tableMessage" class="helper-text"></p>
+          <div id="editableTable" class="table-wrap"></div>
+          <details>
+            <summary>Equipment limit inventory</summary>
+            <p class="helper-text">Control margins restrict dispatch movement; they do not replace equipment ratings. Blank limits are unknown. Specified values still need a justified engineering source.</p>
+            <button id="checkLimitsButton" class="ghost-button">Check pending limits</button>
+            <p id="limitMessage" class="helper-text">Check the current inputs before running OPF.</p>
+            <div id="limitInventory" class="table-wrap"></div>
+          </details>
+        </section>
+
+        <section class="content-card">
+          <div class="section-title">
+            <h2>Run Status</h2>
+            <p>Solver messages from the latest representative snapshot.</p>
+          </div>
+          <p class="helper-text">PF convergence does not certify equipment limits. OPF success requires successful solver and physics checks.</p>
+          <div id="downloadLinks"></div>
+          <div id="runStatusTable" class="table-wrap"></div>
+        </section>
+
+        <section class="content-card">
+          <div class="section-title">
+            <h2>Time Series</h2>
+            <p>Inspect losses, all bus voltages, and storage dispatch across profile snapshots.</p>
+          </div>
+          <div class="table-toolbar chart-toolbar">
+            <label>
+              Result group
+              <select id="timeSeriesGroupSelect"></select>
+            </label>
+            <label>
+              Element
+              <select id="timeSeriesElementSelect"></select>
+            </label>
+            <label>
+              Quantity
+              <select id="timeSeriesMetricSelect"></select>
+            </label>
+          </div>
+          <div id="timeSeriesChartWrap" class="chart-wrap">
+            <svg id="timeSeriesChart" viewBox="0 0 980 320" role="img" aria-label="Time-series result chart"></svg>
+          </div>
+          <div id="timeSeriesLegend" class="chart-legend"></div>
+          <p id="timeSeriesNote" class="helper-text"></p>
+        </section>
+
+        <section class="content-card">
+          <div class="section-title">
+            <h2>Results</h2>
+            <p>Representative PF/OPF result tables. Profiled runs show the first timestamp here.</p>
+          </div>
+          <div class="table-toolbar">
+            <select id="resultTableSelect"></select>
+          </div>
+          <div id="resultTable" class="table-wrap"></div>
+        </section>
+
+        <section class="content-card grid-card">
+          <div class="section-title">
+            <h2>Interactive Grid View</h2>
+            <p>The same custom HTML grid view generated by the benchmark runner.</p>
+          </div>
+          <iframe id="gridFrame" title="Tool1 (acdcopf) grid view"></iframe>
+        </section>
+      </section>
+    </main>
+
+    <script src="config.js"></script>
+    <script src="dashboard.js?v=tool1-030-naming2"></script>
+  </body>
+</html>

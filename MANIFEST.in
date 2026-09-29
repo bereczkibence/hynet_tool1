@@ -1,0 +1,19 @@
+include README.md DEVELOPMENT.md THIRD_PARTY_NOTICES.md requirements.txt
+include *.bat *.ps1 .gitignore
+recursive-include docs *.md *.json
+recursive-include examples *.py *.json
+recursive-include scripts *.py
+recursive-include dashboard/static *.js *.css *.html
+recursive-include benchmarks/stagg5/profiles *.csv
+prune inputs
+prune .venv
+prune .validation
+prune release
+prune build
+prune .pytest_cache
+exclude docs/source_checksums.json
+global-exclude *.pyc *.log *.tmp
+
+recursive-include tests *.mjs
+
+prune tool5
