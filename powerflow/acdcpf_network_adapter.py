@@ -61,15 +61,13 @@ class ACDCPFNetworkAdapter(PowerFlowSolver):
             solved_case = copy.deepcopy(case) if copy_case else case
             from .tool5_contract import prepare_converter_limits
             prepare_converter_limits(solved_case)
-            result = pf.solve(
-                solved_case,
-                copy_network=False,
-                options=pf.PFOptions(policy=getattr(solved_case, "tool5_policy", self.policy),
-                    enforce_slack_q_limits=self.enforce_slack_q_limits,
-                    max_iter_outer=self.max_iter_outer, max_iter_inner=self.max_iter_inner,
-                    tolerance=self.tolerance, verbose=self.verbose),
+            from acdcpf_pyflow_backend.public_api import solve_network
+            solved_case.converged = solve_network(
+                solved_case, policy=getattr(solved_case, "tool5_policy", self.policy),
+                enforce_slack_q_limits=self.enforce_slack_q_limits,
+                max_iter_outer=self.max_iter_outer, max_iter_inner=self.max_iter_inner,
+                tolerance=self.tolerance, verbose=self.verbose,
             )
-            solved_case.converged = result.converged
 
             if copy_case and write_back:
                 _copy_solution_state(source=solved_case, target=case)

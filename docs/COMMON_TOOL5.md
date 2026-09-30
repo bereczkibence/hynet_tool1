@@ -1,114 +1,48 @@
-# Common Tool5 integration
+# Tool5 source-folder integration
 
-Tool1 depends on the independently maintained common Tool5 package. Tool5 source
-and distributions are not included here. Obtain `acdcpf==0.2.0+tool5.1` with API
-v1 separately; see the root README for installation. No Tool5 remote URL is
-assumed and no upstream release is claimed to be equivalent.
+Tool1 loads the public `slazar394/acdcpf` solver without changing its source or requiring the private `0.2.0+tool5.1` package. Tool1 remains a working development version.
 
-## Install and run this copy
+## Setup
 
-Python 3.10+; validated on Python 3.10/Windows.
+Copy or clone the **whole Tool5 checkout** into `tool5/` inside the Tool1 checkout:
 
-```powershell
-python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install "C:\path\to\compatible-tool5"
-.\.venv\Scripts\python.exe -m pip install ".[dashboard,dev]"
-.\.venv\Scripts\tool1-doctor.exe --solve
-.\.venv\Scripts\tool1-dashboard.exe
+```text
+hynet_tool1/
+  pyproject.toml
+  tool5/
+    pyproject.toml
+    acdcpf/
+      __init__.py
 ```
 
-After installing, open
-http://127.0.0.1:8521/ (backend 8520). The earlier project uses 8520/8521 and is
-untouched. Copy reports use `Tool1Common` application data, or `TOOL1_REPORT_DIR`.
-If IPOPT is absent, install the appropriate IDAES solver binaries or set
-`TOOL1_IPOPT`; PF-only and standalone Tool5 do not require IPOPT.
+Install Tool1 once with `python -m pip install -e ".[dashboard]"` and install IPOPT with `idaes get-extensions`. Run `tool1-doctor --solve`, then `tool1-dashboard`. Tool5 itself is not pip-installed. Its Python dependencies are included in Tool1's dependencies. The copied folder is ignored by Git and excluded from Tool1 distributions.
 
-Independent workbench processes:
+For a different layout, set `TOOL1_TOOL5_PATH` to the Tool5 checkout (or its `acdcpf` package directory) in the launching environment. This is also required for wheel installations where the checkout is separate from the installed Tool1 package. Selection order is explicit environment path, Tool1's `tool5/` folder, Tool1's `acdcpf/` folder (the default GitHub checkout name), then an installed `acdcpf`. An invalid explicit or local source is an error, not a silent fallback. Once imported, a backend cannot be switched inside the same Python process: restart after replacing the folder.
 
-```powershell
-.\.venv\Scripts\tool1-backend.exe --port 8520 --cors-origin http://127.0.0.1:8521
-.\.venv\Scripts\tool1-frontend.exe --port 8521 --backend-url http://127.0.0.1:8520
-```
+`tool1-doctor` and `/api/health` identify the actual module path and version, rather than assuming an installed distribution's version describes the loaded source.
 
-Backend OpenAPI: `/docs`. `/api/health` advertises Tool5 version, API version,
-capabilities and limitations. Existing import/edit/run/poll/export endpoints are
-unchanged. JSON run requests accept `pf_policy`: `unconstrained` (default) or
-`converter_limited`. Limited mode requires `skip_opf: true`; it is not silently
-used to change the controls fixed by OPF. Result runs contain `tool5` diagnostics,
-including policy, warnings, changes to controls, residuals and converter limit
-violations. These are also retained in the service diagnostics and exports.
+## Application adapter
 
-## Use Tool5 from another application
+Tool1 uses public `acdcpf.run_pf`. Compatibility logic resides in `acdcpf_pyflow_backend`, not in the copied repository. The earlier common API v1 backend remains supported when separately installed/selected.
 
-Install the separately supplied compatible Tool5 source or wheel:
+- Solve on a temporary network view; preserve input matrices, source IDs, setpoints and limits.
+- Map active equipment to dense internal indices and restore original IDs in result tables.
+- Preserve explicit AC slack selection by ordering its generator first in each island.
+- Convert bus shunts from Tool1 per-unit to the MW/MVAr values consumed by public Tool5's PYPOWER translation.
+- Translate standalone transformer tables into tapped branches, retaining impedance bases and phase shifts. Read branch terminal powers from the solved PYPOWER matrices to avoid a public Tool5 phase-shift discrepancy in its separately recomputed branch report.
+- Translate storage snapshot injections to temporary signed loads. Tool1's native storage tables, controls and SOC constraints remain unchanged.
+- Pass limit-enforcement policy explicitly. OPF baselines use unconstrained PF; converter-limited PF may change controls and reports those changes.
 
-```python
-import acdcpf
-from acdcpf.networks import create_case5_stagg_mtdc_slack
+The Tool1 converter-filter reactive balance follows the selected backend. With `Q_f=-B_f|V_f|^2`, public Tool5 uses `S_cf=S_sf+jQ_f`; the previous API-v1 fork uses `S_cf=S_sf-jQ_f`. Tool1 therefore selects `Q_pr+Q_tf-Q_f=0` for public Tool5 and retains `Q_pr+Q_tf+Q_f=0` for API v1. Independent source-data checks use the corresponding reactor current (`I_c=I_tf+jB_fV_f` for public Tool5). The selection is recorded in OPF data metadata as `tool5_filter_balance_sign`. This change was explicitly requested by the maintainer on 30 September 2026.
 
-print(acdcpf.capabilities())
-network = create_case5_stagg_mtdc_slack()
-result = acdcpf.solve(network, options=acdcpf.PFOptions(policy="unconstrained"))
-print(result.converged, result.diagnostics["residuals"])
-print(result.warnings, result.control_changes)
-print(result.network.res_vsc)
-```
+This matches Tool5's implemented convention; it is not a claim that the two conventions represent identical physical filter admittances. Network input values, equipment limits, optimizer settings and copied Tool5 files remain unchanged.
 
-`solve` copies the caller's network by default; input tables and source IDs are
-preserved. `copy_network=False` writes results onto the caller's network.
-Invalid input raises an exception; numerical non-convergence returns
-`converged=False`. The v1 contract and conventions are in
-the Tool5 package's own `docs/CONTRACT.md`.
+## Limits of compatibility
 
-Do not install upstream `acdcpf` and this package together: they share the same
-import name. This is a versioned common fork combining documented upstream
-changes with required existing extensions. It is not a claim that arbitrary
-upstream versions are drop-in compatible. Tool1 pins the tested release and checks
-API major version/capabilities. Upgrades must pass both test suites and the baseline
-comparison before changing that pin.
+Public Tool5 does not implement fixed-Pdc converter modes. Those networks receive an explicit error before solving; they are not silently converted to fixed-Pac controls.
 
-## Electrical boundaries
+Public Tool5's converter-filter equations differ from the previous Tool1-compatible fork. Networks with nonzero filters may have different PF/OPF losses and currents compared with the earlier fork. Tool1 matches the selected backend and retains its independent physics/feasibility diagnostics. PF convergence alone is not OPF feasibility. Do not claim numerical equivalence between backends.
 
-OPF equations, optimizer settings and equipment limits remain unchanged.
-Tool1's adapter maps physical converter current limits to the system AC base and
-preserves voltage limits. Tool5 retains the existing fork's shunt, converter-filter
-KCL, storage, transformer, fixed-Pdc and dense-indexing behavior.
+Public `run_pf` returns convergence but does not expose the previous fork's full residual report. Missing upstream residuals are labelled unavailable, never reported as zero. Tool1's separate physical diagnostics remain the basis for assessing OPF feasibility.
 
-The upstream capability limiter is available explicitly. It may clamp non-slack
-converter P/Q or drop voltage/droop control. It never optimizes DC generation.
-Slack reactive limiting is separately opt-in through the Python API and does not
-curtail slack active power. Fixed-Pdc controls are supported in unconstrained mode;
-limited mode rejects them until that combination has been validated.
-
-Source ICMAX interpretation remains explicit: Standard MatACDC is per-unit;
-Tool #7 uses its documented kA-based rating. Current-circle utilization,
-physical reactor-current utilization and Tool1's OPF limit checks are distinct.
-Convergence alone is not a feasibility certificate.
-
-For DC imports, select `per_pole` or `pole_to_pole` in the dashboard or
-`ImportOptions(dc_voltage_convention=...)`. Symmetric bipolar pole-to-pole input
-is normalized to half the voltage and one quarter of the physical resistance
-computed from its unchanged per-unit resistance and power base. Per-unit voltages,
-powers and losses are invariant; physical conductor current doubles relative to
-treating the same source value as per-pole. This assumes the stated per-unit
-resistance convention: confirmation from the source owner is still required.
-`legacy` preserves prior numbers with an explicit unconfirmed-convention warning;
-it does not infer the intended physical interpretation of the supplied Tool #7 file.
-Original source matrices and files are never edited.
-
-## Validation and release
-
-```powershell
-.\.venv\Scripts\python.exe -m pytest tests --basetemp=.validation/tests
-.\.venv\Scripts\python.exe scripts/compare_baseline.py ../hynet_tool1
-.\.venv\Scripts\python.exe scripts/build_release.py
-.\.venv\Scripts\python.exe scripts/verify_release.py
-```
-
-The original checksum manifest is preserved. `integration_checksums.json` records
-only the four authorized adapter/importer/bootstrap integration changes; OPF and
-case checksums retain the original baseline. Tool5 has its own provenance record.
-Private `inputs/`, virtual environments, Git state and reports are excluded from
-artifacts. Tool1 is a working development version distributed under MIT. See
-LICENSE and THIRD_PARTY_NOTICES.md for the applicable license and attribution.
-Further refinement and validation remain in progress.
+The tested upstream revision and actual validation outcomes are recorded in `PUBLIC_TOOL5_VALIDATION.md`. Later upstream changes require rerunning these checks; version `0.2.0` alone does not identify a Git revision.

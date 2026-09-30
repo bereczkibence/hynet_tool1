@@ -18,17 +18,21 @@ Tool1 minimizes active power losses using Pyomo/IPOPT, with Tool5 (acdcpf) provi
 
 Requires Python 3.10+ (tested on Windows/Python 3.10) and IPOPT for optimization.
 
-**Tool5 is required separately and is not included.** Obtain the compatible `acdcpf==0.2.0+tool5.1` package (Tool5 API v1) from its maintainers. This version is not on PyPI; standard upstream `acdcpf` is not a drop-in replacement.
+**Tool5 is required separately and is not bundled.** Copy the public [slazar394/acdcpf](https://github.com/slazar394/acdcpf) source checkout into `tool5/` inside this project. The resulting path must be `tool5/acdcpf/__init__.py`. Tool1 loads it directly; no Tool5 package installation or special fork is required.
 
 ```powershell
 git clone https://github.com/bereczkibence/hynet_tool1_v1.git
 cd hynet_tool1_v1
+git clone https://github.com/slazar394/acdcpf.git tool5
 python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install "C:\path\to\compatible-tool5" ".[dashboard]"
+.\.venv\Scripts\python.exe -m pip install -e ".[dashboard]"
 .\.venv\Scripts\idaes.exe get-extensions
+.\.venv\Scripts\tool1-doctor.exe --solve
 ```
 
-Replace the example Tool5 path with its wheel or source folder. On Windows, `Install_Tool1.bat -Tool5Path "C:\path\to\compatible-tool5"` also installs and checks the application.
+Copying an extracted Tool5 folder instead of cloning it works too; a checkout named `acdcpf/` is also detected. On Windows, run `Install_Tool1.bat` after copying it. Python dependencies and IPOPT still require the normal Tool1 installation above. Restart the backend after replacing Tool5. For a source folder elsewhere, set `TOOL1_TOOL5_PATH` before launching Tool1.
+
+Public Tool5 does not support fixed-Pdc converter controls. Tool1 follows the selected Tool5 converter-filter formulation. Results can differ from the previously used fork; review PF/OPF physics diagnostics. See [integration details and limitations](docs/COMMON_TOOL5.md).
 
 ## Quick Start
 

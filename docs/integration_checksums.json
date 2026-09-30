@@ -1,6 +1,9 @@
 {
-  "acdcpf_pyflow_backend/_bootstrap.py": "a59ef6f773b20544e6ffb1e2b157c36fe798c206244a94fecec6b822ab5941bd",
+  "acdcpf_pyflow_backend/_bootstrap.py": "09df9720efb655e607379b58923c4b780bc192b82c125317f9282ff288d3eaea",
   "acdcpf_pyflow_backend/runner.py": "61891a4d576003f9d283d7fb12d78ecf5eddd804bcf42d6ff50d6c04ec595f76",
-  "data/custom_network.py": "8ee2d56504d1e9541a565c2aa185114f3ac8e06e1d3cd0be96ce516913abb257",
-  "powerflow/acdcpf_network_adapter.py": "28b69d7873afa3f59cf3ffd626b2ec1581fc895e2ff547bb0a2dbb6fd37e8c04"
+  "data/custom_network.py": "75f9041e4dc14b48dfe257162156c61d0b76577dd0731a42899b28d35bfb3c9a",
+  "powerflow/acdcpf_network_adapter.py": "3fd66e089e02dc4a4dc53f603ae73bd5683af2a059a6c680dd9503bf3a9758e5",
+  "data/acdcpf_to_pyomo.py": "0b9cf187998d8a6b3ad8149de92ed0ff2f56dd7fa20ae59fd264bf3e14586a12",
+  "opf/formulations/acdc_opf_pyomo_loss_min.py": "4aae8e000de3df09b8d0c0730d26bc03287108339a365f87b8c58362e14f543c",
+  "opf/physics_validation.py": "c11b0b24791e9f8b9162661208b60c54b1fce5fff86ce51f4d192fd22aba47e0"
 }

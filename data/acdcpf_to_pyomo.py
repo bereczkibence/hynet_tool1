@@ -5,7 +5,8 @@ from typing import Any, Mapping, Sequence
 
 import numpy as np
 import pandas as pd
-from acdcpf.validation import validate_network
+from acdcpf_pyflow_backend.network_validation import validate_network
+from acdcpf_pyflow_backend._bootstrap import filter_balance_sign
 
 from acdcpf_opf.data.equipment_limits import DCDC_RATE_FIELDS, equipment_limit_inventory, validate_equipment_limits
 from acdcpf_opf.powerflow.result import PFResult
@@ -114,6 +115,7 @@ def convert_acdcpf_network_to_opf_data(
                 "dcdc": "DCDC voltage ratio is fixed unless options select it and ratio bounds are provided.",
                 "vdc_vac": "Voltage-controlled VSC setpoints are fixed unless options override this.",
             },
+            "tool5_filter_balance_sign": filter_balance_sign(),
             "control_margin_percent": options.control_margin_percent,
             "snapshot_duration_hours": options.snapshot_duration_hours,
             "optimize_converter_active_power": options.optimize_converter_active_power,
@@ -757,7 +759,8 @@ def _build_converters(
                 "r": _float_value(row, "r_c_pu", 0.0),
                 "x": _float_value(row, "x_c_pu", 0.0),
             },
-            "filter": {"b": _float_value(row, "b_filter_pu", 0.0)},
+            "filter": {"b": _float_value(row, "b_filter_pu", 0.0),
+                       "balance_sign": filter_balance_sign()},
             "loss_a": _float_value(row, "loss_a", 0.0) / s_base,
             "loss_b": _float_value(row, "loss_b", 0.0) * current_base_ka / s_base,
             "loss_c": loss_c_ohm * current_base_ka**2 / s_base,

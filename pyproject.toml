@@ -19,7 +19,7 @@ dependencies = [
     "pandas<3",
     "pyomo>=6.10",
     "idaes-pse",
-    "acdcpf==0.2.0+tool5.1",
+    "pypower>=5.1",
 ]
 
 [project.optional-dependencies]

@@ -1,2 +1,2 @@
-# Install compatible Tool5 separately first; see README.md.
-.[dashboard,benchmark]
+# Copy public Tool5 into tool5/ first; see README.md.
+-e .[dashboard,benchmark]

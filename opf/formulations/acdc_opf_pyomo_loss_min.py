@@ -850,7 +850,10 @@ def build_acdc_opf_model(
         return m.Ppr_fc[c] + m.Ptf_fi[c] == 0.0
 
     def filter_reactive_balance_rule(m: pyo.ConcreteModel, c: str) -> Any:
-        return m.Qpr_fc[c] + m.Qtf_fi[c] + m.Q_filter[c] == 0.0
+        # Match the selected PF backend's converter-filter convention.
+        # Public Tool5: S_cf=S_sf+jQ_f; common API-v1: S_cf=S_sf-jQ_f.
+        sign = float(converters[c].get("filter", {}).get("balance_sign", 1.0))
+        return m.Qpr_fc[c] + m.Qtf_fi[c] + sign * m.Q_filter[c] == 0.0
 
     model.filter_active_balance = pyo.Constraint(model.CONV, rule=filter_active_balance_rule)
     model.filter_reactive_balance = pyo.Constraint(model.CONV, rule=filter_reactive_balance_rule)

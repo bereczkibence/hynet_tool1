@@ -42,7 +42,8 @@ def test_native_benchmarks_match_pf_replay(config, case):
     assert result.replay_comparison["matches"]
     assert result.objective_total_active_losses_mw <= result.base_pf_result.total_active_losses + 1e-5
     assert result.objective_total_active_losses_mw == pytest.approx(result.validation_pf_result.total_active_losses, abs=1e-5)
-    if case == "original":
+    from acdcpf_pyflow_backend._bootstrap import backend_info
+    if case == "original" and backend_info()["api_version"] != "public-run_pf":
         assert result.base_pf_result.total_active_losses == pytest.approx(8.63675283443, abs=1e-6)
         assert result.objective_total_active_losses_mw == pytest.approx(8.62474722201, abs=1e-5)
     for key, storage in result.data["storage_units"].items():
@@ -89,6 +90,11 @@ def test_fixed_pdc_is_preserved_and_replayed(config, mode):
     net.vsc.at[2, "p_dc_set_mw"] = -30.0
     options = ACDCPFToPyomoOptions(optimize_converter_active_power=False, optimize_converter_reactive_power=False)
     result = solve_pyomo_acdc_loss_min_opf(net, config=config, conversion_options=options)
+    from acdcpf_pyflow_backend._bootstrap import backend_info
+    if backend_info()["api_version"] == "public-run_pf":
+        assert not result.success
+        assert "fixed-Pdc" in result.message
+        return
     assert result.success, result.message
     assert pyo.value(result.model.Pcv_dc["CONV2"]) * net.s_base == pytest.approx(30.0, abs=1e-7)
     assert result.validation_pf_result.raw_result.res_vsc.at[2, "p_dc_mw"] == pytest.approx(-30.0, abs=1e-5)

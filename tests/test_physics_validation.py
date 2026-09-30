@@ -7,7 +7,8 @@ import math
 from xml.etree import ElementTree as ET
 from zipfile import ZipFile
 
-import acdcpf
+from acdcpf_pyflow_backend.network_factory import NetworkFactory
+acdcpf = NetworkFactory()
 import pytest
 
 from acdcpf_opf.benchmarks.stagg5 import benchmark_pf_opf_comparison as benchmark

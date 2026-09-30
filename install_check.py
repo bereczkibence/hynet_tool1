@@ -24,8 +24,9 @@ def main(argv: list[str] | None = None) -> int:
         import pyomo.environ as pyo
 
         print(f"Python: {sys.version.split()[0]} ({sys.executable})")
-        for package in ("hynet-tool1", "acdcpf", "pyomo", "numpy", "pandas"):
+        for package in ("hynet-tool1", "pyomo", "numpy", "pandas"):
             print(f"{package}: {metadata.version(package)}")
+        print(f"Tool5 version: {acdcpf.__version__}")
         print(f"ACDCPF source: {acdcpf.__file__}")
         executable = ipopt_executable_path()
         print(f"IPOPT: {executable}")

@@ -143,7 +143,7 @@ def create_app(*, serve_frontend: bool = True, cors_origins: list[str] | None = 
     @app.get("/api/health")
     def health():
         from acdcpf_opf.runtime_paths import ipopt_executable_path
-        return {"status": "ok", "tool": "Tool1 (acdcopf)", "version": "0.3.0", "development_status": DEVELOPMENT_STATUS, "power_flow": {"tool": "Tool5 (acdcpf)", **__import__("acdcpf").capabilities()}, "ipopt_available": ipopt_executable_path().is_file(), "session_id": SESSION_ID, "max_active_runs": 1}
+        return {"status": "ok", "tool": "Tool1 (acdcopf)", "version": "0.3.0", "development_status": DEVELOPMENT_STATUS, "power_flow": {"tool": "Tool5 (acdcpf)", **__import__("acdcpf_pyflow_backend._bootstrap", fromlist=["backend_info"]).backend_info()}, "ipopt_available": ipopt_executable_path().is_file(), "session_id": SESSION_ID, "max_active_runs": 1}
 
     if serve_frontend:
         app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")

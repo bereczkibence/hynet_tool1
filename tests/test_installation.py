@@ -18,8 +18,9 @@ def test_backend_check_preserves_imported_module_and_search_path():
     ensure_acdcpf_importable()
     assert sys.modules["acdcpf"] is original
     assert sys.path == paths
-    assert hasattr(acdcpf, "create_storage")
-    assert hasattr(acdcpf, "create_transformer")
+    from acdcpf_pyflow_backend.network_factory import NetworkFactory
+    assert callable(NetworkFactory().create_storage)
+    assert callable(NetworkFactory().create_transformer)
 
 
 def test_reports_override_does_not_create_files_on_import(tmp_path, monkeypatch):

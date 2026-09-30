@@ -21,13 +21,15 @@ if (-not (Test-Path -LiteralPath $VenvPython)) {
 Invoke-Checked $VenvPython @("-m", "pip", "install", "--upgrade", "pip")
 if ($Tool5Path) {
     $ExternalTool5 = (Resolve-Path -LiteralPath $Tool5Path -ErrorAction Stop).Path
-    Invoke-Checked $VenvPython @("-m", "pip", "install", $ExternalTool5)
+    if (Test-Path -LiteralPath $ExternalTool5 -PathType Container) {
+        # Source paths are loaded directly, without installing or modifying Tool5.
+        $env:TOOL1_TOOL5_PATH = $ExternalTool5
+    } else {
+        Invoke-Checked $VenvPython @("-m", "pip", "install", $ExternalTool5)
+    }
 }
-& $VenvPython -c "from importlib.metadata import version; import acdcpf; assert version('acdcpf') == '0.2.0+tool5.1'; assert acdcpf.capabilities()['api_version'].split('.')[0] == '1'"
-if ($LASTEXITCODE -ne 0) {
-    throw 'Compatible Tool5 is required separately. Run this installer with -Tool5Path pointing to its wheel or source checkout. See README.md.'
-}
-Invoke-Checked $VenvPython @("-m", "pip", "install", "$ProjectRoot[dashboard,benchmark]")
+Invoke-Checked $VenvPython @("-m", "pip", "install", "-e", "$ProjectRoot[dashboard,benchmark]")
+Invoke-Checked $VenvPython @("-c", "from acdcpf_pyflow_backend._bootstrap import backend_info; print(backend_info())")
 if (-not $SkipSolverDownload) {
     $Idaes = Join-Path $ProjectRoot ".venv\Scripts\idaes.exe"
     Invoke-Checked $Idaes @("get-extensions")

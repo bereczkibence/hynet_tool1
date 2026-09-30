@@ -17,3 +17,5 @@ global-exclude *.pyc *.log *.tmp
 recursive-include tests *.mjs
 
 prune tool5
+
+prune acdcpf

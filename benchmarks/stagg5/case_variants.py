@@ -179,9 +179,11 @@ def create_acdcpf_network_for_stagg5_case(case: str | Stagg5GridCase | None = No
 
     from acdcpf.networks import create_case5_stagg_mtdc_slack
 
-    net = create_case5_stagg_mtdc_slack()
+    from acdcpf_pyflow_backend.network_factory import normalize_network
+    net = normalize_network(create_case5_stagg_mtdc_slack())
     _apply_stagg5_reference_line_ratings(net)
-    return net
+    from acdcpf_pyflow_backend.network_factory import normalize_network
+    return normalize_network(net)
 
 
 def custom_grid_case(imported, *, key: str = "custom") -> Stagg5GridCase:
@@ -270,10 +272,11 @@ def create_case5_stagg_mtdc_hybrid_dcdc() -> Any:
     _ensure_native_acdcpf_source()
     from acdcpf.create.converters import create_dcdc
     from acdcpf.create.dc import create_dc_bus, create_dc_gen
-    from acdcpf.create.storage import create_storage
+    from acdcpf_pyflow_backend.network_factory import create_storage
     from acdcpf.networks import create_case5_stagg_mtdc_slack
 
-    net = create_case5_stagg_mtdc_slack()
+    from acdcpf_pyflow_backend.network_factory import normalize_network
+    net = normalize_network(create_case5_stagg_mtdc_slack())
     net.name = "Case5 Stagg Hybrid DCDC"
     _apply_stagg5_reference_line_ratings(net)
 
@@ -345,16 +348,19 @@ def create_case5_stagg_mtdc_hybrid_dcdc() -> Any:
 
     net.dcdc["d_ratio_min"] = net.dcdc["d_ratio"].astype(float) * (1.0 - dcdc_ratio_margin)
     net.dcdc["d_ratio_max"] = net.dcdc["d_ratio"].astype(float) * (1.0 + dcdc_ratio_margin)
-    return net
+    from acdcpf_pyflow_backend.network_factory import normalize_network
+    return normalize_network(net)
 
 
 def create_two_area_stagg5_transformer_dcdc() -> Any:
     """Create the synthetic two-area Stagg5 transformer-DCDC benchmark."""
 
     _ensure_native_acdcpf_source()
-    from acdcpf.create.ac import create_ac_bus, create_ac_gen, create_transformer
+    from acdcpf_pyflow_backend.network_factory import NetworkFactory
+    factory = NetworkFactory()
+    create_ac_bus, create_ac_gen, create_transformer = factory.create_ac_bus, factory.create_ac_gen, factory.create_transformer
     from acdcpf.create.converters import create_dcdc
-    from acdcpf.network import create_empty_network
+    create_empty_network = factory.create_empty_network
     from acdcpf.networks import create_case5_stagg_mtdc_slack
 
     base = create_case5_stagg_mtdc_slack()
@@ -439,7 +445,8 @@ def create_two_area_stagg5_transformer_dcdc() -> Any:
     net.dcdc.at[dcdc_idx, "d_ratio_max"] = 1.05
     net.dcdc.at[dcdc_idx, "rate_mw"] = TWO_AREA_DCDC_RATING_MW
     _apply_vsc_factory_setpoints(net, TWO_AREA_VSC_FACTORY_SETPOINTS_MW_MVAR)
-    return net
+    from acdcpf_pyflow_backend.network_factory import normalize_network
+    return normalize_network(net)
 
 
 def _apply_vsc_factory_setpoints(net: Any, setpoints: dict[int, dict[str, float]]) -> None:
@@ -461,7 +468,10 @@ def _copy_stagg5_area(
     """Copy one Stagg5 area into a target network with remapped indices."""
 
     _ensure_native_acdcpf_source()
-    from acdcpf.create.ac import create_ac_bus, create_ac_line, create_ac_gen, create_ac_load
+    from acdcpf_pyflow_backend.network_factory import NetworkFactory
+    factory = NetworkFactory()
+    create_ac_bus, create_ac_gen = factory.create_ac_bus, factory.create_ac_gen
+    create_ac_line, create_ac_load = factory.create_ac_line, factory.create_ac_load
     from acdcpf.create.converters import create_vsc
     from acdcpf.create.dc import create_dc_bus, create_dc_line, create_dc_load, create_dc_gen
 

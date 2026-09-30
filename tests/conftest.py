@@ -1,5 +1,3 @@
-"""Tests use the installed dependencies, including the pinned ACDCPF fork.
-
-For joint backend development, explicitly install that checkout in the test
-environment with pip -e. Never override packages from sibling repositories here.
-"""
+"""Exercise Tool1 with the selected source checkout, without installing Tool5."""
+from acdcpf_pyflow_backend._bootstrap import ensure_acdcpf_importable
+ensure_acdcpf_importable()

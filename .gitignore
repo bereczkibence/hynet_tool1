@@ -44,3 +44,5 @@ release/
 .release-stage-*/
 # Tool5 must be maintained and installed separately.
 /tool5/
+
+/acdcpf/

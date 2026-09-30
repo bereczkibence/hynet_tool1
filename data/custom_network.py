@@ -139,8 +139,9 @@ Physical loss coefficients are MW/kV/ohm. PU losses use Sbase and
 Ibase=Sbase/(sqrt(3)*basekVac). DC R is converted by Vbase²/baseMVAdc;
 the native backend retains pol in P=pol*V*(V-Vother)/Rpu.
 """
-    import acdcpf as pf
-    from acdcpf.validation import validate_network
+    from acdcpf_pyflow_backend.network_factory import NetworkFactory
+    pf = NetworkFactory()
+    from acdcpf_pyflow_backend.network_validation import validate_network
     from .equipment_limits import validate_equipment_limits
 
     options = options or ImportOptions()

@@ -10,7 +10,33 @@ Tool1 is a functional working version under active development. Features, interf
 
 ## Tool5 (acdcpf)
 
-The common backend is `acdcpf==0.2.0+tool5.1`, a local compatible derivative of `slazar394/acdcpf` commit `fe6da1577b9e6a9dc97650826e2f301967f64ba3` and `ArtemMedvedevDev/acdcpf` commit `1406db69598de099181fa13b5e112b5d9931fdc7`. Both identify ACDCPF Contributors and declare MIT. Tool5 is supplied separately and is not included in this repository. Preserve the license and provenance notices supplied with that dependency. This package has not been published or accepted as an upstream release.
+Tool5 is supplied separately from https://github.com/slazar394/acdcpf and is not bundled. The public solver is loaded unchanged. The earlier local common backend remains an optional compatibility path, not a prerequisite.
+
+Tool1's network validation and transformer/storage table creators in `acdcpf_pyflow_backend/network_validation.py` and `network_factory.py` are adapted from the MIT-licensed `ArtemMedvedevDev/acdcpf` baseline (commit `1406db69598de099181fa13b5e112b5d9931fdc7`). Their license notice is retained below. These are application data/validation helpers, not a vendored PF solver.
+
+```text
+MIT License
+
+Copyright (c) 2025 ACDCPF Contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
 
 ## Other dependencies
 

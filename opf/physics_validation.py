@@ -318,7 +318,8 @@ def _check_vsc(net, results, report, tol, ac_voltage, dc_voltage, ac_balance, dc
         vs = ac_voltage[ac_bus]
         itf = (complex(pac, qac) / base / vs).conjugate()
         vf = vs - complex(float(row.r_tf_pu), float(row.x_tf_pu)) * itf
-        ic = itf - 1j * float(row.b_filter_pu) * vf
+        from acdcpf_pyflow_backend._bootstrap import filter_balance_sign
+        ic = itf - filter_balance_sign() * 1j * float(row.b_filter_pu) * vf
         vc = vf - complex(float(row.r_c_pu), float(row.x_c_pu)) * ic
         sc = vc * ic.conjugate() * base
         loss_base = source_limit(row, "loss_base_kv") or float(net.ac_bus.at[ac_bus, "vr_kv"])
