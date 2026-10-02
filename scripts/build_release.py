@@ -12,10 +12,20 @@ release = root / "release"
 release.mkdir(exist_ok=True)
 folders = {"acdcopf", "acdcpf_pyflow_backend", "benchmarks", "dashboard", "data", "docs", "examples", "experiments", "opf", "powerflow", "scripts", "tests"}
 excluded = {"__pycache__", "reports", ".pytest_cache", ".git", ".venv", "dist"}
-files = [p for p in root.rglob("*") if p.is_file() and
-         not any(part in excluded or part.endswith(".egg-info") for part in p.relative_to(root).parts) and
-         (len(p.relative_to(root).parts) == 1 or p.relative_to(root).parts[0] in folders) and
-         p.suffix not in {".pyc", ".log", ".tmp"} and p.name != "source_checksums.json"]
+root_files = {
+    ".gitattributes", ".gitignore", "LICENSE", "MANIFEST.in", "README.md",
+    "DEVELOPMENT.md", "THIRD_PARTY_NOTICES.md", "pyproject.toml", "requirements.txt",
+    "__init__.py", "install_check.py", "runtime_paths.py", "opf_acdc_loss_min.py",
+    "opf_formulation.py", "start_dashboard.py", "install.ps1", "Install_Tool1.bat",
+    "start_dashboard.bat", "start_dashboard.ps1", "Tool1_Backend.bat",
+    "Tool1_Dashboard.bat", "Tool1_Frontend.bat",
+}
+source_suffixes = {".py", ".md", ".json", ".js", ".mjs", ".css", ".html", ".csv"}
+files = [root / name for name in sorted(root_files) if (root / name).is_file()]
+for folder in sorted(folders):
+    files.extend(p for p in (root / folder).rglob("*") if p.is_file() and
+                 not any(part in excluded or part.endswith(".egg-info") for part in p.relative_to(root).parts) and
+                 p.suffix in source_suffixes and p.name != "source_checksums.json")
 with tempfile.TemporaryDirectory(dir=root, prefix=".release-stage-") as temp:
     stage = Path(temp)
     for path in files:

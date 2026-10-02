@@ -1,24 +1,7 @@
 # Source provenance
 
-Source: PyACDC_OPF release/portable-install-2026-09-28, revision be96e3fa44dc920f95391e50dba20be7738b3da7.
-This copy includes these working-tree changes:
+Tool1 derives from PyACDC_OPF, branch `release/portable-install-2026-09-28`, revision `be96e3fa44dc920f95391e50dba20be7738b3da7`. The source included the custom PyPOWER/MatACDC importer and dashboard fixes in the original working tree.
 
-```text
- M README.md
- M benchmarks/stagg5/benchmark_pf_opf_comparison.py
- M benchmarks/stagg5/case_variants.py
- M benchmarks/stagg5/service.py
- M dashboard/static/dashboard.js
- M dashboard/static/index.html
- M dashboard/web.py
- M data/__init__.py
- M data/acdcpf_to_pyomo.py
-?? data/case_indices.py
-?? data/case_parser.py
-?? data/custom_network.py
-?? docs/CUSTOM_NETWORKS.md
-?? inputs/
-?? tests/test_custom_network.py
-```
+The original numerical-engine baseline is recorded in `engine_checksums.json`; reviewed integration changes are recorded in `integration_checksums.json`. The current public Tool5 integration and its numerical validation are described in [PUBLIC_TOOL5_VALIDATION.md](PUBLIC_TOOL5_VALIDATION.md).
 
-Numerical engine hashes are recorded in engine_checksums.json. Private inputs are excluded from release artifacts.
+Tool5 is maintained separately and is not bundled. See [THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md) for inherited helper-code attribution and dependency licensing. Supplied private network inputs are excluded from distributions.

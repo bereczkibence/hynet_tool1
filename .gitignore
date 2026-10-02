@@ -46,3 +46,7 @@ release/
 /tool5/
 
 /acdcpf/
+
+# Local partner documents
+*.docx
+*.pptx

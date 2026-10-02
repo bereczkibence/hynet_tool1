@@ -26,9 +26,9 @@ for path in release.iterdir():
         continue
     for name, content in entries:
         assert not set(Path(name).parts).intersection({"inputs", ".venv", ".git", "__pycache__", ".validation", ".pytest_cache"}), name
-        assert not name.endswith((".log", ".pyc")), name
+        assert not name.endswith((".log", ".pyc", ".docx", ".pptx")), name
         text = content.decode("utf-8", errors="replace")
-        assert not re.search(r"C:\\+Users\\+(?:berec|bence)", text, re.I), name
+        assert not re.search(r"[A-Z]:\\+Users\\+[^\\/\s]+", text, re.I), name
     print("Audited", path.name, len(entries), "files")
 
 with tempfile.TemporaryDirectory(dir=root / ".validation") as temp:

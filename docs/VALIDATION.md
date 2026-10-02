@@ -1,4 +1,6 @@
-# Tool1 integration validation
+# Historical Tool1 integration validation
+
+This report covers the earlier backend. For the current public Tool5 integration, see [PUBLIC_TOOL5_VALIDATION.md](PUBLIC_TOOL5_VALIDATION.md).
 
 Validated on Windows with Python 3.10.11, Tool5/acdcpf 0.1.1+opf.bme.1, Pyomo 6.10.1, and IPOPT 3.13.2.
 
@@ -24,7 +26,7 @@ Full regression suite: 259 passed, 19 skipped. Skips cover unavailable optional 
 
 Interface checks cover separate frontend and backend processes, actual HTTP requests through a stripping reverse proxy, CORS/preflight, OpenAPI, error schemas, stale import IDs, single-run busy rejection, missing IPOPT, edited DC35 PF, and downloadable Markdown/CSV/XLSX/HTML. Frontend JavaScript checks cover URL prefixes, non-JSON errors, connection errors, labels, source IDs, pending-edit persistence, and restart isolation.
 
-Run `python scripts/verify_engines.py`, `python -m pytest tests -q --confcutdir=tests`, and optionally `node tests/frontend_behavior.mjs`. `scripts/compare_baseline.py ORIGINAL_CHECKOUT` reproduces the numerical comparison when the original environment and private inputs are available.
+Run `python scripts/verify_engines.py`, `python -m pytest tests -q --confcutdir=tests`, and optionally `node tests/frontend_behavior.mjs`. Current backend compatibility is checked by the regression tests; numerical equivalence with the earlier backend is not assumed.
 
 ## Installed artifacts
 

@@ -21,8 +21,8 @@ Requires Python 3.10+ (tested on Windows/Python 3.10) and IPOPT for optimization
 **Tool5 is required separately and is not bundled.** Copy the public [slazar394/acdcpf](https://github.com/slazar394/acdcpf) source checkout into `tool5/` inside this project. The resulting path must be `tool5/acdcpf/__init__.py`. Tool1 loads it directly; no Tool5 package installation or special fork is required.
 
 ```powershell
-git clone https://github.com/bereczkibence/hynet_tool1_v1.git
-cd hynet_tool1_v1
+git clone https://github.com/bereczkibence/hynet_tool1.git
+cd hynet_tool1
 git clone https://github.com/slazar394/acdcpf.git tool5
 python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -e ".[dashboard]"
@@ -56,7 +56,7 @@ API documentation: **http://127.0.0.1:8520/docs**.
 - [Custom networks](docs/CUSTOM_NETWORKS.md)
 - [Tool5 dependency and Python usage](docs/COMMON_TOOL5.md)
 - [Workbench integration](docs/WORKBENCH.md)
-- [Validation results and limitations](docs/COMMON_TOOL5_VALIDATION.md)
+- [Validation results and limitations](docs/PUBLIC_TOOL5_VALIDATION.md)
 
 ## License
 

@@ -61,7 +61,7 @@ acdcpf-opf-stagg5-benchmark = "acdcpf_opf.benchmarks.stagg5.benchmark_pf_opf_com
 acdcpf-opf-native-stagg5 = "acdcpf_opf.experiments.run_acdcpf_network_opf_loss_min:main"
 
 [project.urls]
-Repository = "https://github.com/bereczkibence/hynet_tool1_v1"
+Repository = "https://github.com/bereczkibence/hynet_tool1"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
